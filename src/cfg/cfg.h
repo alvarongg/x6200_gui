@@ -9,6 +9,10 @@
 
 #define FFT_FULL_WIDTH 384000
 
+/* Limits (dB) of the user S-meter offset, see cfg_t.smeter_offset */
+#define CFG_SMETER_OFFSET_MIN (-20)
+#define CFG_SMETER_OFFSET_MAX 20
+
 typedef struct {
     cfg_item_t en;
     cfg_item_t p1;
