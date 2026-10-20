@@ -73,6 +73,8 @@ typedef struct {
 
     // FT8
     cfg_item_t ft8_hold_freq;
+    // Calibration
+    cfg_item_t smeter_offset;
 
     // EQ
     struct {

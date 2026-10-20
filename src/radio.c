@@ -37,6 +37,9 @@
 #define SAMPLE_BASELINE 126.0f
 /* Fixed calibration offset (dB) applied to the level reported by the radio */
 #define DBM_BASE_OFFSET 4
+/* Limits (dB) of the user S-meter offset, see cfg.smeter_offset */
+#define SMETER_OFFSET_MIN (-20)
+#define SMETER_OFFSET_MAX 20
 
 static radio_state_change_t notify_tx;
 static radio_state_change_t notify_rx;
@@ -129,7 +132,9 @@ bool radio_tick() {
         {
             samples[i] = pack->samples[i] - SAMPLE_BASELINE;
         }
-        int16_t dbm = -(int16_t)pack->dbm + DBM_BASE_OFFSET;
+        /* A positive user offset raises the level shown on the S-meter */
+        int32_t smeter_offset = limit(subject_get_int(cfg.smeter_offset.val), SMETER_OFFSET_MIN, SMETER_OFFSET_MAX);
+        int16_t dbm = -(int16_t)pack->dbm + DBM_BASE_OFFSET + smeter_offset;
 
         x6200_mode_t mode = subject_get_int(cfg_cur.mode);
 
